@@ -1,27 +1,21 @@
 cmake_minimum_required(VERSION 3.10)
+project(JuegoLaberinto)
 
-# Nombre de tu proyecto
-project(proyecto-c)
+set(CMAKE_CXX_STANDARD 17)
 
-# Especificar el estándar de C++
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Incluir el directorio de headers
 include_directories(include)
 
-# Recopilar todos los archivos fuente
-file(GLOB SOURCES
-        src/*.cpp
+add_executable(laberinto
+        src/main.cpp
+        src/Node.cpp
+        src/Maze.cpp
+        src/Player.cpp
+        src/Treasure.cpp
+        src/Scoreboard.cpp
+        src/Game.cpp
+        include/Maze.h
+        include/Player.h
+        include/Scoreboard.h
+        include/Treasure.h
+        include/Game.h
 )
-
-# Recopilar todos los archivos header (opcional, para visualización)
-file(GLOB HEADERS
-        include/*.h
-)
-
-# Crear el ejecutable
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-
-# Si necesitas agregar el directorio de data
-# add_definitions(-DDATA_DIR="${CMAKE_SOURCE_DIR}/data/")
