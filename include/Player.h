@@ -1,14 +1,14 @@
-#ifndef JUGADOR_H
-#define JUGADOR_H
+#ifndef Player_H
+#define Player_H
 
 #include <string>
 
 // ============================================
-// Datos del jugador: nombre y posicion
+// Datos del Player: nombre y posicion
 //   - Se mueve en el Laberinto
 //   - Se guarda en Puntuacion
 // ============================================
-class Jugador {
+class Player {
 private:
     std::string nombre;
     int fila;              // Posicion en el tablero (0-8)
@@ -16,9 +16,9 @@ private:
     int puntos;            // Puntuación actual
 
 public:
-    Jugador(const std::string& nombre);
+    Player(const std::string& nombre);
 
-    ~Jugador();
+    ~Player();
 
     std::string getNombre() const;
     int getFila() const;
@@ -34,4 +34,4 @@ public:
     void setPosicion(int f, int c);    // Cambia fila y columna de una vez
 };
 
-#endif // JUGADOR_H
+#endif // Player_H
