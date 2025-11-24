@@ -20,8 +20,3 @@ Construimos un generador de laberintos 9x9 totalmente dinámico que posiciona mu
 - DavidVal2
 - josedav1102
 - julianandresdev
-
-## Próximos pasos
-- Integrar la lógica completa de `Game` para gestionar movimientos, colisiones y turnos.
-- Conectar el `Scoreboard` con un almacenamiento persistente multiusuario.
-- Añadir pruebas unitarias que validen la pila de tesoros y la conectividad del laberinto tras regeneraciones sucesivas.
