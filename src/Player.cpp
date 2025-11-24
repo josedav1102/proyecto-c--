@@ -57,3 +57,35 @@ void Player::setPosicion(int f, int c) {
     fila = f;
     columna = c;
 }
+
+
+void Player::agregarTesoro(const Treasure& t) {
+    inventario.push(t);
+    std::cout << "\n>>> Encontraste un " << t.getName() << "! <<<\n";
+}
+
+Treasure Player::usarTesoro() {
+    if (inventario.empty()) {
+        throw std::runtime_error("No tienes tesoros para usar");
+    }
+
+    Treasure t = inventario.pop();
+    std::cout << "\n>>> Usaste: " << t.getName() << " <<<\n";
+    return t;
+}
+
+int Player::contarTesoros() const {
+    return inventario.size();
+}
+
+bool Player::tieneTesoros() const {
+    return !inventario.empty();
+}
+
+bool Player::ganoElJuego() const {
+    return inventario.size() == 10;  // Victoria con 10 tesoros
+}
+
+Treasure Player::verUltimoTesoro() const {
+    return inventario.top();
+}
