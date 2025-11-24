@@ -2,8 +2,8 @@
 // Created by Julian on 11/11/2025.
 //
 #include "Maze.h"
+#include <Constants.h>
 #include <iostream>
-#include <ctime>
 #include <queue>
 #include <set>
 
@@ -20,8 +20,8 @@ Maze::~Maze() {
 
 void Maze::buildMaze() {
     // Crear 81 nodos (9x9)
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
+    for (int i = 0; i < COLUMNAS; i++) {
+        for (int j = 0; j < COLUMNAS; j++) {
             Node* node = new Node(i, j);
             allNodes.push_back(node);
         }
@@ -47,46 +47,46 @@ void Maze::buildMaze() {
 }
 
 void Maze::connectNodes() {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            int index = i * SIZE + j;
+    for (int i = 0; i < COLUMNAS; i++) {
+        for (int j = 0; j < COLUMNAS; j++) {
+            int index = i * COLUMNAS + j;
             Node* current = allNodes[index];
 
             // Conectar arriba
             if (i > 0) {
-                current->up = allNodes[(i-1) * SIZE + j];
+                current->up = allNodes[(i-1) * COLUMNAS + j];
             }
 
             // Conectar abajo
-            if (i < SIZE - 1) {
-                current->down = allNodes[(i+1) * SIZE + j];
+            if (i < COLUMNAS - 1) {
+                current->down = allNodes[(i+1) * COLUMNAS + j];
             }
 
             // Conectar izquierda
             if (j > 0) {
-                current->left = allNodes[i * SIZE + (j-1)];
+                current->left = allNodes[i * COLUMNAS + (j-1)];
             }
 
             // Conectar derecha
-            if (j < SIZE - 1) {
-                current->right = allNodes[i * SIZE + (j+1)];
+            if (j < COLUMNAS - 1) {
+                current->right = allNodes[i * COLUMNAS + (j+1)];
             }
         }
     }
 }
 
 Node* Maze::getNode(int row, int col) {
-    if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+    if (row < 0 || row >= COLUMNAS || col < 0 || col >= COLUMNAS) {
         return nullptr;
     }
-    return allNodes[row * SIZE + col];
+    return allNodes[row * COLUMNAS + col];
 }
 void Maze::placeWalls() {
     int wallsPlaced = 0;
 
     while (wallsPlaced < 16) {
-        int row = std::rand() % SIZE;
-        int col = std::rand() % SIZE;
+        int row = std::rand() % COLUMNAS;
+        int col = std::rand() % COLUMNAS;
         Node* node = getNode(row, col);
 
         if (node && node->content == 'o') {
@@ -104,8 +104,8 @@ void Maze::placeTreasures() {
         bool placed = false;
 
         while (!placed) {
-            int row = std::rand() % SIZE;
-            int col = std::rand() % SIZE;
+            int row = std::rand() % COLUMNAS;
+            int col = std::rand() % COLUMNAS;
             Node* node = getNode(row, col);
 
             if (node && node->content == 'o') {
@@ -169,20 +169,20 @@ void Maze::resetDiscovered() {
 void Maze::printMaze(int playerRow, int playerCol) {
     // Borde superior
     std::cout << "\n  ";
-    for (int j = 0; j < SIZE; j++) {
+    for (int j = 0; j < COLUMNAS; j++) {
         std::cout << " " << j << " ";
     }
     std::cout << "\n  ";
-    for (int j = 0; j < SIZE + 2; j++) {
+    for (int j = 0; j < COLUMNAS + 2; j++) {
         std::cout << "###";
     }
     std::cout << "\n";
 
     // Contenido del tablero
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < COLUMNAS; i++) {
         std::cout << i << " #";
 
-        for (int j = 0; j < SIZE; j++) {
+        for (int j = 0; j < COLUMNAS; j++) {
             Node* node = getNode(i, j);
 
             if (i == playerRow && j == playerCol) {
@@ -199,7 +199,7 @@ void Maze::printMaze(int playerRow, int playerCol) {
 
     // Borde inferior
     std::cout << "  ";
-    for (int j = 0; j < SIZE + 2; j++) {
+    for (int j = 0; j < COLUMNAS + 2; j++) {
         std::cout << "###";
     }
     std::cout << "\n\n";
