@@ -11,7 +11,6 @@
 class Maze {
 private:
     Node* start;                    // Primer nodo (0,0)
-    const int SIZE = 9;
     std::vector<Node*> allNodes;    // Para fácil acceso y limpieza
 
     void buildMaze();               // Construir lista enlazada 9x9
