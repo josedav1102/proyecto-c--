@@ -1,5 +1,30 @@
-# .idea files
-/.idea
+# Build folders
+build/
+CMakeFiles/
+cmake-build-*/
 
-# Cmake build debug
-/cmake-build-debug
+# Compiled object/binary files
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# CMake generated files
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Editor-specific
+*.swp
+*~
+.vscode/
+.idea/
+
+# Data and logs
+data/scores.txt
+
+# OS generated files
+.DS_Store
+Thumbs.db
