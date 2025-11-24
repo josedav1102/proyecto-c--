@@ -18,4 +18,6 @@ add_executable(laberinto
         include/Scoreboard.h
         include/Treasure.h
         include/Game.h
+        include/Pila_tesoros.h
+        src/Pila_tesoros.cpp
 )
