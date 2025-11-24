@@ -186,7 +186,7 @@ void Maze::printMaze(int playerRow, int playerCol) {
             Node* node = getNode(i, j);
 
             if (i == playerRow && j == playerCol) {
-                std::cout << SIMBOLO_JUGADOR << std::endl;
+                std::cout << " " << SIMBOLO_JUGADOR << " ";
             } else if (node->discovered || node->isWall() || node->isTreasure()) {
                 std::cout << " " << node->content << " ";
             } else {
