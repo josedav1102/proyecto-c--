@@ -21,4 +21,5 @@ add_executable(laberinto
         include/Pila_tesoros.h
         src/Pila_tesoros.cpp
         include/Utilities.h
+        include/Constants.h
 )
