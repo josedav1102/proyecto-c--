@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Pila_tesoros.h"
+
 // ============================================
 // Datos del Player: nombre y posicion
 //   - Se mueve en el Laberinto
@@ -14,6 +16,7 @@ private:
     int fila;              // Posicion en el tablero (0-8)
     int columna;           // Posicion en el tablero (0-8)
     int puntos;            // Puntuación actual
+    PilaTesoros inventario;
 
 public:
     Player(const std::string& nombre);
@@ -32,6 +35,13 @@ public:
     void sumarPuntos(int cantidad);    // Suma puntos (típicamente +1 por movimiento)
     void restarPuntos(int cantidad);   // Resta puntos
     void setPosicion(int f, int c);    // Cambia fila y columna de una vez
+
+    void agregarTesoro(const Treasure& t);  // Push a la pila
+    Treasure usarTesoro();                   // Pop de la pila
+    int contarTesoros() const;               // Size de la pila
+    bool tieneTesoros() const;               // Empty de la pila
+    bool ganoElJuego() const;                // size() == 10
+    Treasure verUltimoTesoro() const;        // Top de la pila
 };
 
 #endif // Player_H
