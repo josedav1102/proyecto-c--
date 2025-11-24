@@ -18,4 +18,4 @@ private:
     int size() const;
 };
 
-#endif //JUEGOLABERINTO_PILA_TESOROS_H
+#endif
