@@ -20,4 +20,5 @@ add_executable(laberinto
         include/Game.h
         include/Pila_tesoros.h
         src/Pila_tesoros.cpp
+        include/Utilities.h
 )
