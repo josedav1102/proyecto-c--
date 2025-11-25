@@ -22,6 +22,8 @@ private:
     void manejarTesoro(Node* nodo);
     void usarTesoroX();
     void verificarVictoria();
+    void mostrarEstadisticas() const;
+    void mostrarInventario() const;
     void mostrarAyuda() const;
 
 public:
