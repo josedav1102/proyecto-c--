@@ -5,8 +5,10 @@
 #include <algorithm>
 #include <iomanip>
 
+#include "Constants.h"
+
 Scoreboard::Scoreboard() {
-    cargarDesdeArchivo("data/scores.txt");
+    cargarDesdeArchivo(ARCHIVO_SCORES);
 }
 
 Scoreboard::~Scoreboard() {
