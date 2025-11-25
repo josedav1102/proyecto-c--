@@ -3,12 +3,13 @@
 //
 #include "Maze.h"
 #include <Constants.h>
+#include <ctime>
 #include <iostream>
 #include <queue>
 #include <set>
 
 Maze::Maze() : start(nullptr) {
-    std::srand(std::time(nullptr));
+    std::srand(std::tme(nullptr));
     buildMaze();
 }
 
