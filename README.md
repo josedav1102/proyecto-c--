@@ -1,8 +1,5 @@
 
 ***
-
-# 📝 README.md - Versión Premium
-
 <div align="center">
 
 # 🏰 Laberinto Dinámico - Juego de Aventuras en C++
