@@ -25,6 +25,7 @@ private:
     void mostrarEstadisticas() const;
     void mostrarInventario() const;
     void mostrarAyuda() const;
+    void mostrarControlesBasicos() const;
 
 public:
     Game();
@@ -33,6 +34,8 @@ public:
     void iniciar();
     void loop();
     void terminar();
+
+    void activarCheatVictoria();
 };
 
 #endif //GAME_H

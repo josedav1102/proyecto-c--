@@ -1,15 +1,10 @@
 //
 // Created by Julian on 11/11/2025.
 //
-//
-// Created by Julian on 11/24/2025.
-//
-
 #include "Game.h"
 #include "Utilities.h"
 #include "Constants.h"
 #include <iostream>
-#include <cstdlib>
 #include <ctime>
 
 Game::Game() : laberinto(nullptr), jugador(nullptr), scoreboard(nullptr), jugando(false) {
@@ -17,11 +12,6 @@ Game::Game() : laberinto(nullptr), jugador(nullptr), scoreboard(nullptr), jugand
 }
 
 Game::~Game() {
-    // Guardar scores antes de destruir
-    /**if (scoreboard) {
-        scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
-    }**/
-
     delete laberinto;
     delete jugador;
     delete scoreboard;
@@ -42,7 +32,6 @@ void Game::iniciar() {
 }
 
 void Game::inicializarJuego() {
-    // Solicitar nombre del jugador
     std::string nombre;
     std::cout << "Ingresa tu nombre: ";
     std::getline(std::cin, nombre);
@@ -51,11 +40,9 @@ void Game::inicializarJuego() {
         nombre = "Jugador";
     }
 
-    // Crear el laberinto
     std::cout << "\nGenerando laberinto...\n";
     laberinto = new Maze();
 
-    // Crear jugador en posicion aleatoria que no sea muro
     int startRow, startCol;
     Node* startNode;
 
@@ -67,11 +54,8 @@ void Game::inicializarJuego() {
 
     jugador = new Player(nombre);
     jugador->setPosicion(startRow, startCol);
-
-    // Destapar posicion inicial
     startNode->discovered = true;
 
-    // Crear scoreboard
     scoreboard = new Scoreboard();
 
     std::cout << "¡Laberinto generado!\n";
@@ -89,15 +73,15 @@ void Game::loop() {
         cleanScreen();
         mostrarEstadisticas();
         laberinto->printMaze(jugador->getFila(), jugador->getColumna());
+        mostrarControlesBasicos();  // NUEVO
 
         std::cout << "\nComando: ";
         std::cout.flush();
 
         char input = getKeyPress();
 
-        // AGREGAR: Filtrar caracteres no válidos
         if (input == '\n' || input == '\r' || input == ' ' || input == '\0') {
-            continue;  // Ignorar y volver a pedir input
+            continue;
         }
 
         std::cout << input << std::endl;
@@ -106,7 +90,6 @@ void Game::loop() {
 
     terminar();
 }
-
 
 void Game::procesarInput(char input) {
     int filaActual = jugador->getFila();
@@ -154,6 +137,12 @@ void Game::procesarInput(char input) {
             jugando = false;
             break;
 
+            //  Cheat code para testing
+        case 'G':
+        case 'g':
+            activarCheatVictoria();
+            break;
+
         default:
             std::cout << "\nComando no valido. Presiona 'H' para ver la ayuda.\n";
             pauseWithDuration(1000);
@@ -161,7 +150,6 @@ void Game::procesarInput(char input) {
 }
 
 void Game::moverJugador(int nuevaFila, int nuevaCol) {
-    // Validar limites
     if (nuevaFila < 0 || nuevaFila >= FILAS || nuevaCol < 0 || nuevaCol >= COLUMNAS) {
         std::cout << "\n¡No puedes salir del laberinto!\n";
         pauseWithDuration(800);
@@ -170,28 +158,22 @@ void Game::moverJugador(int nuevaFila, int nuevaCol) {
 
     Node* nodoDestino = laberinto->getNode(nuevaFila, nuevaCol);
 
-    // Validar que no sea muro
     if (nodoDestino && nodoDestino->isWall()) {
         std::cout << "\n¡Hay un muro ahi!\n";
         pauseWithDuration(800);
         return;
     }
 
-    // Mover al jugador
     jugador->setPosicion(nuevaFila, nuevaCol);
-    jugador->sumarPuntos(1);  // +1 punto por movimiento
-
-    // Destapar la casilla
+    jugador->sumarPuntos(1);
     nodoDestino->discovered = true;
 
-    // Verificar si hay tesoro
     if (nodoDestino->isTreasure()) {
         manejarTesoro(nodoDestino);
     }
 }
 
 void Game::manejarTesoro(Node* nodo) {
-    // Determinar tipo de tesoro
     TreasureType tipo;
     switch(nodo->content) {
         case 'R': tipo = TreasureType::RUBI; break;
@@ -201,16 +183,11 @@ void Game::manejarTesoro(Node* nodo) {
         default: return;
     }
 
-    // Crear tesoro y agregarlo al inventario
     Treasure tesoro(tipo);
     jugador->agregarTesoro(tesoro);
-
-    // Eliminar tesoro del tablero
     nodo->content = SIMBOLO_VACIO;
 
     pauseWithDuration(1500);
-
-    // Verificar condicion de victoria
     verificarVictoria();
 }
 
@@ -221,16 +198,13 @@ void Game::usarTesoroX() {
         return;
     }
 
-    // Usar el tesoro (pop de la pila)
     Treasure tesoroUsado = jugador->usarTesoro();
 
     std::cout << "\nReseteo del tablero en progreso...\n";
     pauseWithDuration(1000);
 
-    // Resetear todas las casillas a ocultas
     laberinto->resetDiscovered();
 
-    // Reaparece el tesoro en una nueva posicion aleatoria
     bool colocado = false;
     while (!colocado) {
         int row = std::rand() % FILAS;
@@ -243,7 +217,6 @@ void Game::usarTesoroX() {
         }
     }
 
-    // Mantener la posicion del jugador destapada
     Node* nodoJugador = laberinto->getNode(jugador->getFila(), jugador->getColumna());
     if (nodoJugador) {
         nodoJugador->discovered = true;
@@ -262,15 +235,12 @@ void Game::verificarVictoria() {
         std::cout << "Jugador: " << jugador->getNombre() << "\n";
         std::cout << "Puntaje final: " << jugador->getPuntos() << " movimientos\n\n";
 
-        // Agregar al scoreboard
         scoreboard->agregarScore(jugador->getNombre(), jugador->getPuntos());
         scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
 
         std::cout << "Tu puntuacion ha sido guardada.\n\n";
 
         pauseWithDuration(3000);
-
-        // Mostrar tabla de puntuaciones
         scoreboard->mostrarScoreboard();
 
         std::cout << "\nPresiona cualquier tecla para salir...";
@@ -340,7 +310,9 @@ void Game::mostrarAyuda() const {
     std::cout << "¡Menor puntaje es mejor!\n\n";
 }
 
-// src/Game.cpp - terminar() (línea ~320)
+void Game::mostrarControlesBasicos() const {
+    std::cout << "\n[W/A/S/D: Mover] [X: Usar tesoro] [I: Inventario] [H: Ayuda] [Q: Salir]\n";
+}
 
 void Game::terminar() {
     cleanScreen();
@@ -356,24 +328,32 @@ void Game::terminar() {
         std::cout << "¡No completaste el juego! ¿Quieres intentarlo de nuevo?\n\n";
     }
 
-    // Guardar progreso al salir
-    std::cout << "Guardando progreso...\n";
-
-    // DEBUG: Verificar condiciones
-    std::cout << "[DEBUG] scoreboard existe: " << (scoreboard ? "SI" : "NO") << "\n";
-    std::cout << "[DEBUG] tesoros encontrados: " << jugador->contarTesoros() << "\n";
-
     if (scoreboard && jugador->contarTesoros() > 0) {
-        std::cout << "[DEBUG] Agregando score: " << jugador->getNombre()
-                  << " con " << jugador->getPuntos() << " puntos\n";
-
         scoreboard->agregarScore(jugador->getNombre(), jugador->getPuntos());
         scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
-
-        std::cout << "Progreso guardado.\n";
-    } else {
-        std::cout << "[AVISO] No se guardó (sin tesoros o scoreboard nulo).\n";
     }
 
     pauseWithDuration(1500);
+}
+void Game::activarCheatVictoria() {
+    std::cout << "\n[CHEAT ACTIVADO] Agregando tesoros...\n";
+
+    // Agregar 10 tesoros al inventario
+    for (int i = 0; i < 10; i++) {
+        TreasureType tipo;
+        switch(i % 4) {
+            case 0: tipo = TreasureType::RUBI; break;
+            case 1: tipo = TreasureType::DIAMANTE; break;
+            case 2: tipo = TreasureType::PERLA; break;
+            case 3: tipo = TreasureType::AMBAR; break;
+            default: tipo = TreasureType::RUBI;
+        }
+        Treasure tesoro(tipo);
+        jugador->agregarTesoro(tesoro);
+    }
+
+    std::cout << "¡10 tesoros agregados! Verifica victoria...\n";
+    pauseWithDuration(1500);
+
+    verificarVictoria();
 }
