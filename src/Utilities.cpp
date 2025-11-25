@@ -49,7 +49,13 @@ void printSeparator() {
 
 char getKeyPress() {
 #ifdef _WIN32
-    return _getch();
+    char c = _getch();
+    // En Windows, filtrar caracteres especiales
+    if (c == 0 || c == -32) {  // Teclas especiales (flechas, etc)
+        _getch();  // Consumir el segundo byte
+        return '\0';  // Retornar nulo para ignorar
+    }
+    return c;
 #else
     // Configurar terminal en modo raw
     struct termios old_tio, new_tio;
