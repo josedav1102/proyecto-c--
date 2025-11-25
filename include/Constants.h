@@ -11,6 +11,6 @@ const char SIMBOLO_MURO = '|';
 const char SIMBOLO_PARED = '#';
 const char SIMBOLO_OCULTO = 'o';
 const char SIMBOLO_VACIO = ' ';
-const char* ARCHIVO_SCORES = "data/scores.txt";
+inline const char* ARCHIVO_SCORES = "data/scoreboard.txt";
 
 #endif
