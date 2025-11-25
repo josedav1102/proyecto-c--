@@ -13,6 +13,9 @@ struct Score {
     std::string nombre;
     int puntos;
 
+    // Constructor por defecto
+    Score() : nombre(""), puntos(0) {}
+
     Score(const std::string& n, int p) : nombre(n), puntos(p) {}
 
     bool operator<(const Score& other) const {
