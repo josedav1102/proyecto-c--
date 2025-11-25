@@ -9,7 +9,7 @@
 #include <set>
 
 Maze::Maze() : start(nullptr) {
-    std::srand(std::tme(nullptr));
+    std::srand(std::time(nullptr));
     buildMaze();
 }
 
