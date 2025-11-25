@@ -13,15 +13,15 @@ add_executable(laberinto
         src/Treasure.cpp
         src/Scoreboard.cpp
         src/Game.cpp
+        src/Pila_tesoros.cpp
+        src/Utilities.cpp
         include/Maze.h
         include/Player.h
         include/Scoreboard.h
         include/Treasure.h
         include/Game.h
         include/Pila_tesoros.h
-        src/Pila_tesoros.cpp
         include/Utilities.h
         include/Constants.h
-        src/Utilities.cpp
         include/Node.h
 )
