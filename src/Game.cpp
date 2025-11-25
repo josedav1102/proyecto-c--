@@ -138,10 +138,10 @@ void Game::procesarInput(char input) {
             break;
 
             //  Cheat code para testing
-        case 'G':
+        /**case 'G':
         case 'g':
             activarCheatVictoria();
-            break;
+            break;**/
 
         default:
             std::cout << "\nComando no valido. Presiona 'H' para ver la ayuda.\n";
