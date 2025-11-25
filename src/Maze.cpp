@@ -3,6 +3,7 @@
 //
 #include "Maze.h"
 #include <Constants.h>
+#include <ctime>
 #include <iostream>
 #include <queue>
 #include <set>
