@@ -48,7 +48,7 @@ void Maze::buildMaze() {
 }
 
 void Maze::connectNodes() {
-    for (int i = 0; i < COLUMNAS; i++) {
+    for (int i = 0; i < FILAS; i++) {
         for (int j = 0; j < COLUMNAS; j++) {
             int index = i * COLUMNAS + j;
             Node* current = allNodes[index];
