@@ -403,7 +403,6 @@ Presiona <kbd>G</kbd> durante el juego para activar el cheat:
 <details>
 <summary><b>🖼️ Ver Capturas de Pantalla</b></summary>
 
-## To-Do:
 
 ### Pantalla de Inicio
 ![Pantalla de Inicio](https://i.imgur.com/8I6V7gH.png)
