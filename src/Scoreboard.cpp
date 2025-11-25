@@ -1,11 +1,11 @@
 #include "Scoreboard.h"
 #include "Utilities.h"
+#include "Constants.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <iomanip>
-
-#include "Constants.h"
+#include <cstdio>
 
 Scoreboard::Scoreboard() {
     cargarDesdeArchivo(ARCHIVO_SCORES);
@@ -46,63 +46,34 @@ std::vector<Score> Scoreboard::obtenerTop10() const {
     return ranking;
 }
 
-#include <cstdio>  // Agregar al inicio de Scoreboard.cpp
-
 void Scoreboard::guardarEnArchivo(const std::string& archivo) const {
-    std::cout << "[DEBUG] Intentando guardar " << scores.size() << " scores...\n";
-
     if (scores.empty()) {
-        std::cout << "[AVISO] No hay scores para guardar.\n";
         return;
     }
 
-#ifdef _WIN32
-    system("if not exist data mkdir data");
-#else
-    system("mkdir -p data");
-#endif
-
-    // Usar fopen (C-style) en lugar de ofstream
     FILE* file = fopen(archivo.c_str(), "w");
 
     if (!file) {
-        std::cerr << "[ERROR] No se pudo abrir " << archivo << " (errno: "
-                  << errno << ")\n";
-        perror("fopen");
         return;
     }
 
-    std::cout << "[DEBUG] Guardando scores en " << archivo << ":\n";
-
     for (const auto& par : scores) {
         fprintf(file, "%s,%d\n", par.first.c_str(), par.second);
-        std::cout << "  - " << par.first << ": " << par.second << "\n";
     }
 
-    // Forzar escritura
     fflush(file);
-
-    // Cerrar archivo
-    if (fclose(file) != 0) {
-        std::cerr << "[ERROR] Error al cerrar archivo\n";
-        perror("fclose");
-    } else {
-        std::cout << "[OK] Archivo cerrado exitosamente.\n";
-    }
+    fclose(file);
 }
 
 void Scoreboard::cargarDesdeArchivo(const std::string& archivo) {
     std::ifstream file(archivo);
 
     if (!file.is_open()) {
-        // Si no existe el archivo, no es un error crítico
-        // Se creará cuando se guarde por primera vez
         return;
     }
 
     std::string linea;
     while (std::getline(file, linea)) {
-        // Buscar la coma separadora
         size_t pos = linea.find(',');
         if (pos != std::string::npos) {
             std::string nombre = linea.substr(0, pos);
