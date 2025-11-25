@@ -17,6 +17,11 @@ Game::Game() : laberinto(nullptr), jugador(nullptr), scoreboard(nullptr), jugand
 }
 
 Game::~Game() {
+    // Guardar scores antes de destruir
+    if (scoreboard) {
+        scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
+    }
+
     delete laberinto;
     delete jugador;
     delete scoreboard;
@@ -348,4 +353,14 @@ void Game::terminar() {
     if (jugador->contarTesoros() < 10) {
         std::cout << "¡No completaste el juego! ¿Quieres intentarlo de nuevo?\n\n";
     }
+
+    // : Guardar progreso al salir
+    std::cout << "Guardando progreso...\n";
+    if (scoreboard && jugador->contarTesoros() > 0) {
+        scoreboard->agregarScore(jugador->getNombre(), jugador->getPuntos());
+        scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
+        std::cout << "Progreso guardado.\n";
+    }
+
+    pauseWithDuration(1500);
 }

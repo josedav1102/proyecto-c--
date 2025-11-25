@@ -47,10 +47,18 @@ std::vector<Score> Scoreboard::obtenerTop10() const {
 }
 
 void Scoreboard::guardarEnArchivo(const std::string& archivo) const {
+    // Crear directorio data/ si no existe
+#ifdef _WIN32
+    system("if not exist data mkdir data");
+#else
+    system("mkdir -p data");
+#endif
+
     std::ofstream file(archivo);
 
     if (!file.is_open()) {
         std::cerr << "Error: No se pudo abrir el archivo " << archivo << " para escribir.\n";
+        std::cerr << "Asegurate de que el directorio 'data/' exista.\n";
         return;
     }
 
@@ -60,7 +68,13 @@ void Scoreboard::guardarEnArchivo(const std::string& archivo) const {
     }
 
     file.close();
+
+    // Verificar que se guardó correctamente
+    if (file.fail()) {
+        std::cerr << "Error: Fallo al escribir en " << archivo << "\n";
+    }
 }
+
 
 void Scoreboard::cargarDesdeArchivo(const std::string& archivo) {
     std::ifstream file(archivo);
