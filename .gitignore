@@ -28,3 +28,5 @@ data/scores.txt
 # OS generated files
 .DS_Store
 Thumbs.db
+# Data files
+data/

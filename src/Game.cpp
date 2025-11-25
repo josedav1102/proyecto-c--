@@ -18,9 +18,9 @@ Game::Game() : laberinto(nullptr), jugador(nullptr), scoreboard(nullptr), jugand
 
 Game::~Game() {
     // Guardar scores antes de destruir
-    if (scoreboard) {
+    /**if (scoreboard) {
         scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
-    }
+    }**/
 
     delete laberinto;
     delete jugador;
@@ -340,6 +340,8 @@ void Game::mostrarAyuda() const {
     std::cout << "¡Menor puntaje es mejor!\n\n";
 }
 
+// src/Game.cpp - terminar() (línea ~320)
+
 void Game::terminar() {
     cleanScreen();
     printHeader("GRACIAS POR JUGAR");
@@ -354,12 +356,23 @@ void Game::terminar() {
         std::cout << "¡No completaste el juego! ¿Quieres intentarlo de nuevo?\n\n";
     }
 
-    // : Guardar progreso al salir
+    // Guardar progreso al salir
     std::cout << "Guardando progreso...\n";
+
+    // DEBUG: Verificar condiciones
+    std::cout << "[DEBUG] scoreboard existe: " << (scoreboard ? "SI" : "NO") << "\n";
+    std::cout << "[DEBUG] tesoros encontrados: " << jugador->contarTesoros() << "\n";
+
     if (scoreboard && jugador->contarTesoros() > 0) {
+        std::cout << "[DEBUG] Agregando score: " << jugador->getNombre()
+                  << " con " << jugador->getPuntos() << " puntos\n";
+
         scoreboard->agregarScore(jugador->getNombre(), jugador->getPuntos());
         scoreboard->guardarEnArchivo(ARCHIVO_SCORES);
+
         std::cout << "Progreso guardado.\n";
+    } else {
+        std::cout << "[AVISO] No se guardó (sin tesoros o scoreboard nulo).\n";
     }
 
     pauseWithDuration(1500);

@@ -46,35 +46,50 @@ std::vector<Score> Scoreboard::obtenerTop10() const {
     return ranking;
 }
 
+#include <cstdio>  // Agregar al inicio de Scoreboard.cpp
+
 void Scoreboard::guardarEnArchivo(const std::string& archivo) const {
-    // Crear directorio data/ si no existe
+    std::cout << "[DEBUG] Intentando guardar " << scores.size() << " scores...\n";
+
+    if (scores.empty()) {
+        std::cout << "[AVISO] No hay scores para guardar.\n";
+        return;
+    }
+
 #ifdef _WIN32
     system("if not exist data mkdir data");
 #else
     system("mkdir -p data");
 #endif
 
-    std::ofstream file(archivo);
+    // Usar fopen (C-style) en lugar de ofstream
+    FILE* file = fopen(archivo.c_str(), "w");
 
-    if (!file.is_open()) {
-        std::cerr << "Error: No se pudo abrir el archivo " << archivo << " para escribir.\n";
-        std::cerr << "Asegurate de que el directorio 'data/' exista.\n";
+    if (!file) {
+        std::cerr << "[ERROR] No se pudo abrir " << archivo << " (errno: "
+                  << errno << ")\n";
+        perror("fopen");
         return;
     }
 
-    // Guardar en formato: nombre,puntos
+    std::cout << "[DEBUG] Guardando scores en " << archivo << ":\n";
+
     for (const auto& par : scores) {
-        file << par.first << "," << par.second << "\n";
+        fprintf(file, "%s,%d\n", par.first.c_str(), par.second);
+        std::cout << "  - " << par.first << ": " << par.second << "\n";
     }
 
-    file.close();
+    // Forzar escritura
+    fflush(file);
 
-    // Verificar que se guardó correctamente
-    if (file.fail()) {
-        std::cerr << "Error: Fallo al escribir en " << archivo << "\n";
+    // Cerrar archivo
+    if (fclose(file) != 0) {
+        std::cerr << "[ERROR] Error al cerrar archivo\n";
+        perror("fclose");
+    } else {
+        std::cout << "[OK] Archivo cerrado exitosamente.\n";
     }
 }
-
 
 void Scoreboard::cargarDesdeArchivo(const std::string& archivo) {
     std::ifstream file(archivo);
